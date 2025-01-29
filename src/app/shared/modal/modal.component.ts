@@ -5,6 +5,7 @@ import {
   viewChild,
   AfterViewInit,
   ElementRef,
+  OnDestroy,
 } from '@angular/core';
 import { ModalService } from '../../services/modal.service';
 
@@ -14,7 +15,7 @@ import { ModalService } from '../../services/modal.service';
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.css',
 })
-export class ModalComponent {
+export class ModalComponent implements AfterViewInit, OnDestroy {
   modal = inject(ModalService);
 
   id = input.required<string>();
@@ -22,5 +23,9 @@ export class ModalComponent {
 
   ngAfterViewInit() {
     this.modal.register(this.id(), this.dialog().nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    this.modal.unregister(this.id());
   }
 }

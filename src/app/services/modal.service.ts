@@ -22,4 +22,20 @@ export class ModalService {
       },
     ]);
   }
+
+  unregister(id: string) {
+    this.modals.set(this.modals().filter((modal) => modal.id !== id));
+    console.log(this.modals());
+  }
+
+  toggle(id: string) {
+    const modal = this.modals().find((modal) => modal.id === id);
+    if (!modal) return;
+
+    if (modal.element.open) {
+      modal.element.close();
+    } else {
+      modal.element.showModal();
+    }
+  }
 }
