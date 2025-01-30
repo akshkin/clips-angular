@@ -15,4 +15,11 @@
 </p>
 } @if(control().hasError("email")) {
 <p class="text-red-400 pt-2">Please enter a valid email</p>
+} @if(control().hasError("min")) {
+<p class="text-red-400 pt-2">Value too low</p>
+} @if(control().hasError("pattern")) {
+<p class="text-red-400 pt-2">
+  Passwords must be at least 8 characters long, have 1 uppercase letter, 1
+  lowercase letter and 1 number
+</p>
 } }
