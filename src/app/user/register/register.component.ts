@@ -28,4 +28,8 @@ export class RegisterComponent {
     confirmPassword: ['', [Validators.required]],
     phoneNumber: [''],
   });
+
+  register() {
+    console.log('form submitted!');
+  }
 }
