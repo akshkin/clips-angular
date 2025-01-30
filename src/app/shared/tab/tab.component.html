@@ -1,1 +1,4 @@
-<ng-content></ng-content>
+<!-- bind class attribute to hidden class -->
+<div [class.hidden]="!isActive()">
+  <ng-content></ng-content>
+</div>
