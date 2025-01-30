@@ -1,11 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../../shared/input/input.component';
+import { AlertComponent } from '../../shared/alert/alert.component';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, CommonModule, InputComponent],
+  imports: [ReactiveFormsModule, CommonModule, InputComponent, AlertComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
@@ -29,7 +30,13 @@ export class RegisterComponent {
     phoneNumber: [''],
   });
 
+  showAlert = signal(false);
+  alertMessage = signal('Please wait while your account is being created');
+  alertColor = signal('blue');
+
   register() {
-    console.log('form submitted!');
+    this.showAlert.set(true);
+    this.alertMessage.set('Please wait while your account is being created');
+    this.alertColor.set('blue');
   }
 }
