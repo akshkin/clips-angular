@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { InputComponent } from '../../shared/input/input.component';
 import { AlertComponent } from '../../shared/alert/alert.component';
 import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { addDoc, collection, Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-register',
@@ -14,6 +15,7 @@ import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
 export class RegisterComponent {
   formBuilder = inject(FormBuilder);
   #auth = inject(Auth);
+  #firestore = inject(Firestore);
 
   form = this.formBuilder.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -51,7 +53,12 @@ export class RegisterComponent {
         email,
         password
       );
-      console.log(userCred);
+      await addDoc(collection(this.#firestore, 'users'), {
+        name: this.form.getRawValue().name,
+        email: this.form.getRawValue().email,
+        age: this.form.getRawValue().age,
+        // phoneNumber: this.form.getRawValue().phoneNumber,
+      });
     } catch (err: any) {
       console.error(err);
       this.alertMessage.set(
