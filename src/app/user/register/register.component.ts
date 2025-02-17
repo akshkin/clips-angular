@@ -3,8 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../../shared/input/input.component';
 import { AlertComponent } from '../../shared/alert/alert.component';
-import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
-import { addDoc, collection, Firestore } from '@angular/fire/firestore';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -14,8 +13,7 @@ import { addDoc, collection, Firestore } from '@angular/fire/firestore';
 })
 export class RegisterComponent {
   formBuilder = inject(FormBuilder);
-  #auth = inject(Auth);
-  #firestore = inject(Firestore);
+  auth = inject(AuthService);
 
   form = this.formBuilder.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -45,20 +43,8 @@ export class RegisterComponent {
     this.alertColor.set('blue');
     this.inSubmission.set(true);
 
-    const { email, password } = this.form.getRawValue();
-
     try {
-      const userCred = await createUserWithEmailAndPassword(
-        this.#auth,
-        email,
-        password
-      );
-      await addDoc(collection(this.#firestore, 'users'), {
-        name: this.form.getRawValue().name,
-        email: this.form.getRawValue().email,
-        age: this.form.getRawValue().age,
-        // phoneNumber: this.form.getRawValue().phoneNumber,
-      });
+      await this.auth.createUser(this.form.getRawValue());
     } catch (err: any) {
       console.error(err);
       this.alertMessage.set(
