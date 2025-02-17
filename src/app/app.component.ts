@@ -13,3 +13,13 @@ import { ModalComponent } from './shared/modal/modal.component';
 export class AppComponent {
   title = 'clips-angular';
 }
+
+// ,
+// "overrides": {
+//   "@angular/fire": {
+//     "@angular/common": "^16.0.0",
+//     "@angular/core": "^16.0.0",
+//     "@angular/platform-browser": "^16.0.0",
+//     "@angular/platform-browser-dynamic": "^16.0.0"
+//   }
+// }
