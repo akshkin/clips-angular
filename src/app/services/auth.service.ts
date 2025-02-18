@@ -8,6 +8,7 @@ import {
 import { setDoc, doc } from '@angular/fire/firestore';
 import { Firestore } from '@angular/fire/firestore';
 import IUser from '../models/user.model';
+import { delay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,7 @@ export class AuthService {
   #auth = inject(Auth);
   #firestore = inject(Firestore);
   authState$ = authState(this.#auth);
+  authStateWithDelay$ = this.authState$.pipe(delay(1000));
 
   constructor() {}
 
