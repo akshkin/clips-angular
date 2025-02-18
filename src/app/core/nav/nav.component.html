@@ -11,11 +11,7 @@
       <!-- Primary Navigation -->
       <ul class="flex flex-row mt-1">
         <!-- Navigation Links -->
-        <li>
-          <a class="px-2" href="#" (click)="openModal($event)"
-            >Login / Register</a
-          >
-        </li>
+        @if(auth.authState$ | async) {
         <li>
           <a class="px-2" href="#">Manage</a>
         </li>
@@ -25,6 +21,14 @@
         <li>
           <a class="px-2" href="about.html">About</a>
         </li>
+        } @else {
+
+        <li>
+          <a class="px-2" href="#" (click)="openModal($event)"
+            >Login / Register</a
+          >
+        </li>
+        }
       </ul>
     </div>
   </nav>

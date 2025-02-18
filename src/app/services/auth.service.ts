@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import {
   Auth,
+  authState,
   createUserWithEmailAndPassword,
   updateProfile,
 } from '@angular/fire/auth';
-import { addDoc, collection, setDoc, doc } from '@angular/fire/firestore';
+import { setDoc, doc } from '@angular/fire/firestore';
 import { Firestore } from '@angular/fire/firestore';
 import IUser from '../models/user.model';
 
@@ -14,6 +15,7 @@ import IUser from '../models/user.model';
 export class AuthService {
   #auth = inject(Auth);
   #firestore = inject(Firestore);
+  authState$ = authState(this.#auth);
 
   constructor() {}
 
