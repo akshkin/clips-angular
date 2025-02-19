@@ -9,8 +9,8 @@ import {
 import { setDoc, doc } from '@angular/fire/firestore';
 import { Firestore } from '@angular/fire/firestore';
 import IUser from '../models/user.model';
-import { delay } from 'rxjs';
-import { Router } from '@angular/router';
+import { delay, filter, map, switchMap } from 'rxjs';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -21,8 +21,28 @@ export class AuthService {
   authState$ = authState(this.#auth);
   authStateWithDelay$ = this.authState$.pipe(delay(1000));
   router = inject(Router);
+  route = inject(ActivatedRoute);
+  redirect = false;
 
-  constructor() {}
+  constructor() {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map((event) => {
+          let currentRoute = this.route;
+
+          // Navigate to the first child route when the user navigates to a route with children
+          while (currentRoute.firstChild) {
+            currentRoute = currentRoute.firstChild;
+          }
+          return currentRoute;
+        }),
+        switchMap((route) => route.data)
+      )
+      .subscribe((data) => {
+        this.redirect = data['authOnly'] ?? false;
+      });
+  }
 
   async createUser(userData: IUser) {
     const userCred = await createUserWithEmailAndPassword(
@@ -45,6 +65,8 @@ export class AuthService {
   async logout($event: Event) {
     $event?.preventDefault();
     await signOut(this.#auth);
-    await this.router.navigateByUrl('/');
+    if (this.redirect) {
+      await this.router.navigateByUrl('/');
+    }
   }
 }
