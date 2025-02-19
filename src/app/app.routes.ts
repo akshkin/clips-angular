@@ -3,6 +3,7 @@ import { HomeComponent } from './views/home/home.component';
 import { AboutComponent } from './views/about/about.component';
 import { ManageComponent } from './views/manage/manage.component';
 import { UploadComponent } from './views/upload/upload.component';
+import { ClipComponent } from './views/clip/clip.component';
 
 export const routes: Routes = [
   {
@@ -26,5 +27,9 @@ export const routes: Routes = [
     data: {
       authOnly: true,
     },
+  },
+  {
+    path: 'clip/:id',
+    component: ClipComponent,
   },
 ];
