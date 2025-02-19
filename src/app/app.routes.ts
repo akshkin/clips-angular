@@ -4,6 +4,7 @@ import { AboutComponent } from './views/about/about.component';
 import { ManageComponent } from './views/manage/manage.component';
 import { UploadComponent } from './views/upload/upload.component';
 import { ClipComponent } from './views/clip/clip.component';
+import { NotFoundComponent } from './views/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -31,5 +32,9 @@ export const routes: Routes = [
   {
     path: 'clip/:id',
     component: ClipComponent,
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
   },
 ];
