@@ -5,6 +5,9 @@ import { ManageComponent } from './views/manage/manage.component';
 import { UploadComponent } from './views/upload/upload.component';
 import { ClipComponent } from './views/clip/clip.component';
 import { NotFoundComponent } from './views/not-found/not-found.component';
+import { AuthGuard, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+
+const redirectUnauthorizedToHome = () => redirectUnauthorizedTo('/');
 
 export const routes: Routes = [
   {
@@ -20,14 +23,18 @@ export const routes: Routes = [
     component: ManageComponent,
     data: {
       authOnly: true,
+      authGuardPipe: redirectUnauthorizedToHome,
     },
+    canActivate: [AuthGuard],
   },
   {
     path: 'upload',
     component: UploadComponent,
     data: {
       authOnly: true,
+      authGuardPipe: redirectUnauthorizedToHome,
     },
+    canActivate: [AuthGuard],
   },
   {
     path: 'clip/:id',
