@@ -6,8 +6,7 @@ import {
   signOut,
   updateProfile,
 } from '@angular/fire/auth';
-import { setDoc, doc } from '@angular/fire/firestore';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, setDoc, doc } from '@angular/fire/firestore';
 import IUser from '../models/user.model';
 import { delay, filter, map, switchMap } from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
