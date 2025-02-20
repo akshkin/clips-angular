@@ -1,4 +1,11 @@
-import { Component, effect, inject, input, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { ModalComponent } from '../../shared/modal/modal.component';
 import { IClip } from '../../models/clip.model';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -27,6 +34,7 @@ export class EditComponent {
   alertMessage = signal('Updating title....');
   inSubmission = signal(false);
   clipService = inject(ClipService);
+  update = output<IClip>();
 
   form = this.formBuilder.nonNullable.group({
     id: [''],
@@ -34,10 +42,16 @@ export class EditComponent {
   });
 
   constructor() {
-    effect(() => {
-      this.form.controls.id.setValue(this.activeClip()?.docID ?? '');
-      this.form.controls.title.setValue(this.activeClip()?.title ?? '');
-    });
+    effect(
+      () => {
+        this.form.controls.id.setValue(this.activeClip()?.docID ?? '');
+        this.form.controls.title.setValue(this.activeClip()?.title ?? '');
+
+        this.inSubmission.set(false);
+        this.showAlert.set(false);
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   async submit() {
@@ -57,6 +71,12 @@ export class EditComponent {
       this.alertColor.set('red');
       this.alertMessage.set('Something went wrong. Please try again later.');
       return;
+    }
+
+    const updatedClip = this.activeClip();
+    if (updatedClip) {
+      updatedClip.title = this.form.controls.title.value;
+      this.update.emit(updatedClip);
     }
 
     this.inSubmission.set(false);
