@@ -3,8 +3,10 @@ import {
   Firestore,
   addDoc,
   collection,
+  doc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from '@angular/fire/firestore';
 import { IClip } from '../models/clip.model';
@@ -30,5 +32,12 @@ export class ClipService {
       where('uid', '==', this.#auth.currentUser?.uid)
     );
     return await getDocs(q);
+  }
+
+  async updateClip(id: string, title: string) {
+    const clipRef = doc(this.#firestore, 'clips', id);
+    return await updateDoc(clipRef, {
+      title,
+    });
   }
 }

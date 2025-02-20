@@ -2,10 +2,12 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { ClipService } from '../../services/clip.service';
 import { IClip } from '../../models/clip.model';
+import { EditComponent } from '../../video/edit/edit.component';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-manage',
-  imports: [RouterLink],
+  imports: [RouterLink, EditComponent],
   templateUrl: './manage.component.html',
   styleUrl: './manage.component.css',
 })
@@ -15,6 +17,8 @@ export class ManageComponent implements OnInit {
   videoOrder = signal('1');
   clipService = inject(ClipService);
   clips = signal<IClip[]>([]);
+  modal = inject(ModalService);
+  activeClip = signal<IClip | null>(null);
 
   sort($event: Event) {
     const { value } = $event.target as HTMLSelectElement;
@@ -43,5 +47,12 @@ export class ManageComponent implements OnInit {
         },
       ]);
     });
+  }
+
+  openModal($event: Event, clip: IClip) {
+    $event.preventDefault();
+
+    this.modal.toggle('editClip');
+    this.activeClip.set(clip);
   }
 }
