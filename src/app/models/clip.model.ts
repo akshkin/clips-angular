@@ -7,4 +7,5 @@ export interface IClip {
   fileName: string;
   clipUrl: string;
   timestamp: Timestamp;
+  docID?: string;
 }
