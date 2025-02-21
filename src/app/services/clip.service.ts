@@ -8,9 +8,11 @@ import {
   query,
   updateDoc,
   where,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { IClip } from '../models/clip.model';
 import { Auth } from '@angular/fire/auth';
+import { Storage, ref, deleteObject } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +21,7 @@ export class ClipService {
   #firestore = inject(Firestore);
   #clipCollection = collection(this.#firestore, 'clips');
   #auth = inject(Auth);
+  #storage = inject(Storage);
 
   constructor() {}
 
@@ -39,5 +42,13 @@ export class ClipService {
     return await updateDoc(clipRef, {
       title,
     });
+  }
+
+  async deleteClip(clip: IClip) {
+    const fileRef = ref(this.#storage, clip.clipUrl);
+    await deleteObject(fileRef);
+
+    const docRef = doc(this.#firestore, 'clips', clip.docID as string);
+    await deleteDoc(docRef);
   }
 }
