@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 import { ClipService } from '../../services/clip.service';
 import { IClip } from '../../models/clip.model';
@@ -19,6 +19,13 @@ export class ManageComponent implements OnInit {
   clips = signal<IClip[]>([]);
   modal = inject(ModalService);
   activeClip = signal<IClip | null>(null);
+  orderedClips = computed(() => {
+    return this.clips().sort((a, b) => {
+      return this.videoOrder() === '1'
+        ? a.timestamp.toMillis() - b.timestamp.toMillis()
+        : b.timestamp.toMillis() - a.timestamp.toMillis();
+    });
+  });
 
   sort($event: Event) {
     const { value } = $event.target as HTMLSelectElement;
